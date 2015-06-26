@@ -16,7 +16,7 @@ public class RegistrationRecord {
     @Index
     private String regId;
 
-    @Index
+//    @Index
     private String userName;
 
     public String getRegId() {
