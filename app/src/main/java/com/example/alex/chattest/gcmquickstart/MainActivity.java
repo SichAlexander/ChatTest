@@ -26,27 +26,45 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.alex.chattest.R;
+import com.example.alex.myapplication.backend.registration.Registration;
+import com.example.alex.myapplication.backend.registration.RegistrationRequest;
+import com.example.alex.myapplication.backend.registration.model.CollectionResponseRegistrationRecord;
+import com.example.alex.myapplication.backend.registration.model.RegistrationRecord;
+import com.example.alex.myapplication.backend.registration.model.UserInfo;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
+import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.IOException;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "MainActivity";
+
+    private static Registration regService = null;
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private ProgressBar mRegistrationProgressBar;
     private TextView mInformationTextView;
 
+    private Button btnGetAllusers;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        initRegService();
         mRegistrationProgressBar = (ProgressBar) findViewById(R.id.registrationProgressBar);
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -70,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
+        findUI();
+        setlisteners();
     }
 
     @Override
@@ -106,4 +126,34 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private void findUI(){
+        btnGetAllusers = (Button) findViewById(R.id.btnGetAllUsers_AM);
+    }
+    private void setlisteners(){
+        btnGetAllusers.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+
+    private void initRegService(){
+        Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(),
+                new AndroidJsonFactory(), null)
+                // Need setRootUrl and setGoogleClientRequestInitializer only for local testing,
+                // otherwise they can be skipped
+//                .setRootUrl("http://127.0.0.1:8080/")
+                .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                    @Override
+                    public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
+                            throws IOException {
+                        abstractGoogleClientRequest.setDisableGZipContent(true);
+                    }
+                });
+        // end of optional local run code
+
+        regService = builder.build();
+    }
 }

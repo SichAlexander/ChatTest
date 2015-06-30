@@ -1,5 +1,6 @@
 package com.example.Alex.myapplication.backend;
 
+import com.googlecode.objectify.annotation.Container;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -16,8 +17,22 @@ public class RegistrationRecord {
     @Index
     private String regId;
 
+    public RegistrationRecord() {
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    @Index
+    private String phone;
 //    @Index
-    private String userName;
+
+    private UserInfo userInfo;
+
 
     public String getRegId() {
         return regId;
@@ -27,14 +42,14 @@ public class RegistrationRecord {
         this.regId = regId;
     }
 
-    public String getUserName() {
-        return userName;
+
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
-
 
 
 }

@@ -25,6 +25,8 @@ import android.util.Log;
 
 import com.example.alex.chattest.R;
 import com.example.alex.myapplication.backend.registration.Registration;
+import com.example.alex.myapplication.backend.registration.model.CollectionResponseRegistrationRecord;
+import com.example.alex.myapplication.backend.registration.model.UserInfo;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -98,11 +100,17 @@ public class RegistrationIntentService extends IntentService {
         // Add custom implementation, as needed.
         initRegService();
         try {
-            regService.register(token, "temp1").execute();
+            UserInfo userInfo = new UserInfo();
+            userInfo.setFirstName("ewq");
+            userInfo.setLastName("asd");
+            regService.register(token, "+380967530189", userInfo).execute();
+//            CollectionResponseRegistrationRecord listDevices = regService.listDevices(10).execute();
+//            Log.d("chat", "" + listDevices.size().);
         } catch (IOException e) {
             e.printStackTrace();
 //            msg = "Error: " + e.getMessage();
         }
+
 
     }
 

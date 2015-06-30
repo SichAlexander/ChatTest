@@ -56,11 +56,11 @@ public class MessagingEndpoint {
         }
         Sender sender = new Sender(API_KEY);
         Message msg = new Message.Builder().addData("message", message).build();
-        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(10).list();
+        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).filter("phone =", "+380967530189").list();
         for (RegistrationRecord record : records) {
             Result result = sender.send(msg, record.getRegId(), 5);
             if (result.getMessageId() != null) {
-                log.warning("Message sent to " + record.getRegId() + " userName: " + record.getUserName() +" id: "  );
+                log.warning("Message sent to " + record.getRegId() + " userName: " + record.getUserInfo().getFirstName() + "_" + record.getUserInfo().getLastName() +" id: "  );
                 String canonicalRegId = result.getCanonicalRegistrationId();
                 if (canonicalRegId != null) {
                     // if the regId changed, we have to update the datastore

@@ -17,7 +17,7 @@ public class DataStoreHelper {
 
     private static DatastoreService datastore;
 
-    private static ArrayList<User> authors = new ArrayList<>();
+    private static ArrayList<User> users = new ArrayList<>();
 
     private static User generateUser(Entity _result){
         User user = new User();
